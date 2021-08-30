@@ -20,7 +20,6 @@ function App() {
   const alpacaImgTypes = Object.keys(alpacaData);
 
   let loadedImages = [];
-  let loading = true;
 
 
   const featureButtons = () => {
@@ -28,23 +27,12 @@ function App() {
       return (
         <div>
           <h3>{type}</h3>
-          {alpacaData[type].map(btnName => <Button title={btnName.substring(0,btnName.length - 4)} />)}
+          {alpacaData[type].map(
+            btnName => <Button title={btnName.substring(0,btnName.length - 4)} />
+          )}
         </div>
       )
     });
-  }
-
-
-  const draw = ctx => {
-    return (imgSrc, x=0, y=0) => {
-      const img = new Image();
-      
-      img.src = imgSrc;
-
-      img.onload = function(){
-        ctx.drawImage(img, x, y, 400, 400);
-      };
-    }
   }
 
   const loadAlpaca = loadedImages => {
@@ -86,8 +74,6 @@ function App() {
         console.log(loadedImages);
         loadedImages.forEach(img => {
           ctx.drawImage(img, 0, 0, 400, 400);
-          loading = false;
-          console.log(loading);
         });
       })
       .catch(err => console.log(err));

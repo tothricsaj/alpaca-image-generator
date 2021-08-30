@@ -1,10 +1,13 @@
 import { useRef, useEffect } from 'react';
 import './App.css';
+import alpacaData from './data/alpacaData';
 
 function App() {
   const canvasRef = useRef(null);
   let loadedImages = [];
   let loading = true;
+
+  console.log(alpacaData);
 
   const draw = ctx => {
     return (imgSrc, x=0, y=0) => {
@@ -51,24 +54,6 @@ function App() {
 
     ctx.canvas.width = 400;
     ctx.canvas.height = 400;
-
-    // ctx.fillRect(0, 0, 720, 720);
-
-    // const drawToCanvas = draw(ctx);
-
-    // drawToCanvas('/alpaca/backgrounds/blue50.png');
-
-    // drawToCanvas('/alpaca/ears/default.png');
-    // drawToCanvas('/alpaca/hair/default.png');
-
-    // drawToCanvas('/alpaca/neck/default.png');
-    // drawToCanvas('/alpaca/eyes/angry.png');
-
-    // drawToCanvas('/alpaca/nose.png');   
-    // drawToCanvas('/alpaca/mouth/default.png');
-
-    // drawToCanvas('/alpaca/leg/default.png');
-    // drawToCanvas('/alpaca/accessories/headphone.png');
 
     Promise.all(loadAlpaca(loadedImages))
       .then(() => {

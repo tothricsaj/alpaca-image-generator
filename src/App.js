@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import './App.css';
 import alpacaData from './data/alpacaData';
 
@@ -7,8 +7,10 @@ function Button(props) {
     <div
       style={{
         border: '1px solid black',
-        padding: '5px'
+        padding: '5px',
+        display: 'inline-block'
       }}
+      onClick={props.setFeature}
     >
       {props.title}
     </div>
@@ -16,27 +18,7 @@ function Button(props) {
 }
 
 function App() {
-  const canvasRef = useRef(null);
-  const alpacaImgTypes = Object.keys(alpacaData);
-
-  let loadedImages = [];
-
-
-  const featureButtons = () => {
-    return alpacaImgTypes.map(type => {
-      return (
-        <div>
-          <h3>{type}</h3>
-          {alpacaData[type].map(
-            btnName => <Button title={btnName.substring(0,btnName.length - 4)} />
-          )}
-        </div>
-      )
-    });
-  }
-
-  const loadAlpaca = loadedImages => {
-    const imgSources = [
+  const [imgSources, setImgSourses] = useState([
       '/alpaca/backgrounds/blue50.png',
       '/alpaca/ears/default.png',
       '/alpaca/hair/default.png',
@@ -45,7 +27,58 @@ function App() {
       '/alpaca/nose.png',
       '/alpaca/mouth/default.png',
       '/alpaca/accessories/headphone.png',
-    ];
+    ]);
+  const canvasRef = useRef(null);
+  const alpacaImgTypes = Object.keys(alpacaData);
+
+  let loadedImages = [];
+
+  const setFeatures = (type, feature) => {
+    let tmpArr = [...imgSources];
+
+    console.log(type, feature);
+    imgSources.forEach((imgPath, index) => {
+      if(imgPath.includes(type)) {
+        console.log(imgPath);
+        tmpArr[index] = `/alpaca/${type}/${feature}`;
+
+        setImgSourses(tmpArr);
+
+        console.log(imgSources);
+      }
+    });
+  }
+
+
+  const featureButtons = () => {
+    return alpacaImgTypes.map(type => {
+      return (
+        <div>
+          <h3>{type}</h3>
+          {alpacaData[type].map(
+            btnName => (
+            <Button
+              title={btnName.substring(0,btnName.length - 4)}
+              setFeature={() => setFeatures(type, btnName)}
+            />
+            )
+          )}
+        </div>
+      )
+    });
+  }
+
+  const loadAlpaca = loadedImages => {
+    // const imgSources = [
+    //   '/alpaca/backgrounds/blue50.png',
+    //   '/alpaca/ears/default.png',
+    //   '/alpaca/hair/default.png',
+    //   '/alpaca/neck/default.png',
+    //   '/alpaca/eyes/angry.png',
+    //   '/alpaca/nose.png',
+    //   '/alpaca/mouth/default.png',
+    //   '/alpaca/accessories/headphone.png',
+    // ];
 
     const promiseArr = imgSources.map(imgUrl => {
       const promise = new Promise((resolve, reject) => {

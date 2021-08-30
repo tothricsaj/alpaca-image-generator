@@ -2,12 +2,38 @@ import { useRef, useEffect } from 'react';
 import './App.css';
 import alpacaData from './data/alpacaData';
 
+function Button(props) {
+  return (
+    <div
+      style={{
+        border: '1px solid black',
+        padding: '5px'
+      }}
+    >
+      {props.title}
+    </div>
+  )
+}
+
 function App() {
   const canvasRef = useRef(null);
+  const alpacaImgTypes = Object.keys(alpacaData);
+
   let loadedImages = [];
   let loading = true;
 
-  console.log(alpacaData);
+
+  const featureButtons = () => {
+    return alpacaImgTypes.map(type => {
+      return (
+        <div>
+          <h3>{type}</h3>
+          {alpacaData[type].map(btnName => <Button title={btnName.substring(0,btnName.length - 4)} />)}
+        </div>
+      )
+    });
+  }
+
 
   const draw = ctx => {
     return (imgSrc, x=0, y=0) => {
@@ -74,6 +100,10 @@ function App() {
       <canvas
         ref={canvasRef}
       ></canvas>
+
+      <div className="buttonsWrapper">
+        { featureButtons() }
+      </div>
     </div>
   );
 }
